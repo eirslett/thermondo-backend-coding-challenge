@@ -15,9 +15,9 @@ performance. 💪**
 ## ✅ Requirements
 
 - [ ] The backend should expose RESTful endpoints to handle user input and
-  return movie ratings.
+      return movie ratings.
 - [ ] The system should store data in a database. You can use any existing
-  dataset or API to populate the initial database.
+      dataset or API to populate the initial database.
 - [ ] Implement user endpoints to create and view user information.
 - [ ] Implement movie endpoints to create and view movie information.
 - [ ] Implement a rating system to rate the entertainment value of a movie.
