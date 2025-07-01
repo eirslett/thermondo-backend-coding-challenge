@@ -5,6 +5,9 @@
   "author": "",
   "private": true,
   "license": "UNLICENSED",
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "scripts": {
     "build": "nest build --type-check",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -13,6 +16,8 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "db:schema:generate": "prisma generate",
+    "db:testdata": "prisma db seed",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
@@ -21,9 +26,14 @@
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
+    "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",
     "@nestjs/mapped-types": "^2.1.0",
     "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/swagger": "^11.2.0",
+    "@prisma/client": "^6.11.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.2",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
   },
@@ -45,6 +55,7 @@
     "globals": "^16.0.0",
     "jest": "^29.7.0",
     "prettier": "^3.4.2",
+    "prisma": "^6.11.0",
     "source-map-support": "^0.5.21",
     "supertest": "^7.0.0",
     "ts-jest": "^29.2.5",
