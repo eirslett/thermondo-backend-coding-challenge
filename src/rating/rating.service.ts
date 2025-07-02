@@ -50,4 +50,8 @@ export class RatingService {
   async findAllByUserId(userId: number) {
     return this.prisma.rating.findMany({ where: { userId } });
   }
+
+  async findAllByMovieId(movieId: number) {
+    return this.prisma.rating.findMany({ where: { movieId } });
+  }
 }

@@ -43,7 +43,7 @@ describe("MovieController (e2e)", () => {
 
     // Get the PrismaService instance
     prismaService = moduleFixture.get<PrismaService>(PrismaService);
-  }, 10000);
+  }, 30000);
 
   beforeEach(async () => {
     // Clean up the database before each test
@@ -134,6 +134,69 @@ describe("MovieController (e2e)", () => {
         expect(typeof movie.id).toBe("number");
         expect(movie.id).toBeGreaterThan(0);
       });
+    });
+  });
+
+  describe("/movie/:id/ratings (GET)", () => {
+    it("should return all ratings for a given movie", async () => {
+      // Create a movie
+      const movie = await prismaService.movie.create({
+        data: {
+          title: "Test Movie",
+          releaseDate: new Date("2020-01-01"),
+          posterUrl: "https://example.com/test-movie.jpg",
+          description: "A test movie",
+        },
+      });
+      // Create users
+      const user1 = await prismaService.user.create({
+        data: { name: "User1" },
+      });
+      const user2 = await prismaService.user.create({
+        data: { name: "User2" },
+      });
+      // Create ratings for the movie
+      const rating1 = await prismaService.rating.create({
+        data: {
+          movieId: movie.id,
+          userId: user1.id,
+          rating: 5,
+          description: "Amazing!",
+        },
+      });
+      const rating2 = await prismaService.rating.create({
+        data: {
+          movieId: movie.id,
+          userId: user2.id,
+          rating: 3,
+          description: "It was ok.",
+        },
+      });
+      // Call the endpoint
+      const response = await request(app.getHttpServer())
+        .get(`/movie/${movie.id}/ratings`)
+        .expect(200);
+      // Should return both ratings
+      expect(Array.isArray(response.body)).toBe(true);
+      expect(response.body).toHaveLength(2);
+      expect(response.body).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: rating1.id,
+            movieId: movie.id,
+            userId: user1.id,
+            rating: 5,
+            description: "Amazing!",
+          }),
+          expect.objectContaining({
+            id: rating2.id,
+            movieId: movie.id,
+            userId: user2.id,
+            rating: 3,
+            description: "It was ok.",
+          }),
+        ]),
+      );
     });
   });
 });

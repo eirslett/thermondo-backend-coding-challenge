@@ -2,12 +2,17 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { MovieController } from "./movie.controller";
 import { MovieService } from "./movie.service";
 import { Movie } from "./entities/movie.entity";
+import { RatingService } from "../rating/rating.service";
 
 describe("MovieController", () => {
   let controller: MovieController;
 
   const mockMovieService = {
     findAll: jest.fn(),
+  };
+
+  const mockRatingService = {
+    findAllByMovieId: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -17,6 +22,10 @@ describe("MovieController", () => {
         {
           provide: MovieService,
           useValue: mockMovieService,
+        },
+        {
+          provide: RatingService,
+          useValue: mockRatingService,
         },
       ],
     }).compile();
@@ -57,6 +66,20 @@ describe("MovieController", () => {
 
       expect(mockMovieService.findAll).toHaveBeenCalled();
       expect(result).toEqual(expectedMovies);
+    });
+  });
+
+  describe("getRatings", () => {
+    it("should return ratings for a given movie", async () => {
+      const movieId = 1;
+      const expectedRatings = [
+        { id: 1, movieId, rating: 5, description: "Great!" },
+        { id: 2, movieId, rating: 4, description: "Good!" },
+      ];
+      mockRatingService.findAllByMovieId.mockResolvedValue(expectedRatings);
+      const result = await controller.getRatings(String(movieId));
+      expect(mockRatingService.findAllByMovieId).toHaveBeenCalledWith(movieId);
+      expect(result).toEqual(expectedRatings);
     });
   });
 });
