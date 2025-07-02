@@ -86,4 +86,19 @@ describe("RatingService", () => {
       await expect(service.remove(1, 1)).rejects.toThrow(NotFoundException);
     });
   });
+
+  describe("findAllByUserId", () => {
+    it("should return all ratings for a user", async () => {
+      const ratings = [
+        { id: 1, userId: 1, movieId: 1, rating: 5, description: "Great!" },
+        { id: 2, userId: 1, movieId: 2, rating: 4, description: "Good!" },
+      ];
+      prismaMock.rating.findMany.mockResolvedValue(ratings);
+      const result = await service.findAllByUserId(1);
+      expect(prismaMock.rating.findMany).toHaveBeenCalledWith({
+        where: { userId: 1 },
+      });
+      expect(result).toEqual(ratings);
+    });
+  });
 });

@@ -7,5 +7,6 @@ import { PrismaModule } from "../prisma.module";
   imports: [PrismaModule],
   controllers: [RatingController],
   providers: [RatingService],
+  exports: [RatingService],
 })
 export class RatingModule {}

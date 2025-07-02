@@ -57,4 +57,64 @@ describe("UserController (e2e)", () => {
       });
     });
   });
+
+  describe("/user/me/ratings (GET)", () => {
+    beforeAll(async () => {
+      // Create movies and ratings for Alice and Bob
+      await prismaService.rating.deleteMany();
+      await prismaService.user.upsert({
+        where: { id: 2 },
+        update: { name: "Bob" },
+        create: { id: 2, name: "Bob" },
+      });
+      const movie1 = await prismaService.movie.create({
+        data: {
+          title: "Movie 1",
+          releaseDate: new Date(),
+          posterUrl: "url1",
+          description: "desc1",
+        },
+      });
+      const movie2 = await prismaService.movie.create({
+        data: {
+          title: "Movie 2",
+          releaseDate: new Date(),
+          posterUrl: "url2",
+          description: "desc2",
+        },
+      });
+      await prismaService.rating.create({
+        data: {
+          movieId: movie1.id,
+          rating: 5,
+          description: "Alice's rating",
+          userId: 1,
+        },
+      });
+      await prismaService.rating.create({
+        data: {
+          movieId: movie2.id,
+          rating: 3,
+          description: "Bob's rating",
+          userId: 2,
+        },
+      });
+    });
+
+    it("should return only ratings for the current user (Alice)", async () => {
+      const response = await request(app.getHttpServer())
+        .get("/user/me/ratings")
+        .expect(200);
+      const ratings = response.body as Array<{
+        userId: number;
+        description: string;
+      }>;
+      expect(Array.isArray(ratings)).toBe(true);
+      expect(ratings.length).toBe(1);
+      expect(ratings[0]).toMatchObject({
+        userId: 1,
+        description: "Alice's rating",
+      });
+    });
+  });
 });

@@ -46,4 +46,8 @@ export class RatingService {
     if (rating.userId !== userId) throw new ForbiddenException("Not allowed");
     return this.prisma.rating.delete({ where: { id } });
   }
+
+  async findAllByUserId(userId: number) {
+    return this.prisma.rating.findMany({ where: { userId } });
+  }
 }

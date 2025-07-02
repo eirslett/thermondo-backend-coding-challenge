@@ -31,6 +31,8 @@ export class RatingController {
 
   @Get()
   findAll() {
+    // TODO: Add pagination, sorting, filtering, etc.
+    // Or maybe we don't really need this endpoint?
     return this.ratingService.findAll();
   }
 

@@ -6,6 +6,10 @@ import { Movie } from "./entities/movie.entity";
 export class MovieController {
   constructor(private readonly movieService: MovieService) {}
 
+  // TODO:
+  // Add endpoint to create/update/delete movies
+  // This should probably only be available to admins, using role-based auth
+
   @Get()
   async findAll(): Promise<Movie[]> {
     // TODO: Add pagination, sorting, filtering, etc.
