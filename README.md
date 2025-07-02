@@ -12,6 +12,12 @@ Docker
 
 This assumes that PostgreSQL is already installed and running on the developer machine.
 
+- Add a `.env` file to the root of the repository, with the database config:
+
+```
+DATABASE_URL="postgres://eirslett-movie-ratings:eirslett-movie-ratings@localhost:5432/eirslett-movie-ratings?schema=public"
+```
+
 - Run the `./scripts/setup-local-db.sh` script.
 - Install dependencies with `npm install`.
 - Generate SQL schema migrations with `npm run db:schema:generate`
