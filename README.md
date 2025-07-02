@@ -21,6 +21,10 @@ This assumes that PostgreSQL is already installed and running on the developer m
 
 `npm run start:dev`
 
+# API Documentation in Swagger
+
+The API is self-documented with swagger. Docs can be reached at `http://localhost:3000/api`.
+
 # Running unit tests in watch mode
 
 `npm run test:watch`
