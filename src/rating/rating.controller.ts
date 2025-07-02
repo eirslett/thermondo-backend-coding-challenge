@@ -9,6 +9,8 @@ import {
   UseGuards,
   Req,
   UnauthorizedException,
+  UsePipes,
+  ValidationPipe,
 } from "@nestjs/common";
 import { RatingService } from "./rating.service";
 import { CreateRatingDto } from "./dto/create-rating.dto";
@@ -17,6 +19,7 @@ import { AuthGuard, AuthenticatedRequest } from "../auth/auth.guard";
 
 @Controller("rating")
 @UseGuards(AuthGuard)
+@UsePipes(new ValidationPipe({ whitelist: true }))
 export class RatingController {
   constructor(private readonly ratingService: RatingService) {}
 

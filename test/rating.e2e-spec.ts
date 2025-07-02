@@ -95,6 +95,33 @@ describe("RatingController (e2e)", () => {
         userId: alice.id, // Alice is always the logged-in user
       });
     });
+
+    it("should fail to create a rating with value 42 (out of range)", async () => {
+      // Create a new movie for Alice to rate
+      const newMovie = await prismaService.movie.create({
+        data: {
+          title: "Invalid Rating Movie",
+          releaseDate: new Date(),
+          posterUrl: "url-invalid",
+          description: "desc-invalid",
+        },
+      });
+      const dto = {
+        movieId: newMovie.id,
+        rating: 42,
+        description: "Invalid rating!",
+      };
+      const response = await request(app.getHttpServer())
+        .post("/rating")
+        .send(dto)
+        .expect(400);
+      const message = (response.body as { message?: unknown }).message;
+      expect(message).toEqual(
+        expect.arrayContaining([
+          expect.stringMatching(/rating must not be greater than 10/),
+        ]),
+      );
+    });
   });
 
   describe("/rating/:id (PATCH)", () => {
