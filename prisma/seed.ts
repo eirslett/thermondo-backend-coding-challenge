@@ -3,7 +3,6 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log("SEED");
   await prisma.movie.createMany({
     data: [
       {
@@ -40,6 +39,55 @@ async function main() {
         posterUrl: "https://example.com/princessbride-poster.jpg",
         description:
           "While home sick in bed, a young boy's grandfather reads him the story of a farmboy-turned-pirate who encounters numerous obstacles.",
+      },
+    ],
+  });
+
+  await prisma.user.createMany({
+    data: [
+      {
+        name: "Alice",
+      },
+      {
+        name: "Bob",
+      },
+      {
+        name: "Charlie",
+      },
+    ],
+  });
+
+  await prisma.rating.createMany({
+    data: [
+      {
+        rating: 5,
+        description: "Medium good",
+        userId: 1,
+        movieId: 1,
+      },
+      {
+        rating: 9,
+        description: "I liked it a lot",
+        userId: 2,
+        movieId: 1,
+      },
+      {
+        rating: 10,
+        description: "Best movie of all time",
+        userId: 3,
+        movieId: 1,
+      },
+      {
+        rating: 1,
+        description: "Very boring",
+        userId: 1,
+        movieId: 2,
+      },
+      {
+        rating: 4,
+        description: "Just not for me",
+        userId: 3,
+        movieId: 2,
       },
     ],
   });

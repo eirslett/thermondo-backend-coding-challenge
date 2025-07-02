@@ -1,42 +1,32 @@
 import {
   Controller,
   Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
+  Req,
+  UseGuards,
+  NotFoundException,
+  UnauthorizedException,
 } from "@nestjs/common";
 import { UserService } from "./user.service";
-import { CreateUserDto } from "./dto/create-user.dto";
-import { UpdateUserDto } from "./dto/update-user.dto";
+import { User } from "@prisma/client";
+import { AuthGuard, AuthenticatedRequest } from "../auth/auth.guard";
 
 @Controller("user")
+@UseGuards(AuthGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
-  }
+  @Get("me")
+  async me(@Req() req: AuthenticatedRequest): Promise<User> {
+    const { user } = req;
 
-  @Get()
-  findAll() {
-    return this.userService.findAll();
-  }
+    if (!user) {
+      throw new UnauthorizedException("User not authenticated");
+    }
+    const foundUser = await this.userService.findOne(user.id);
 
-  @Get(":id")
-  findOne(@Param("id") id: string) {
-    return this.userService.findOne(+id);
-  }
-
-  @Patch(":id")
-  update(@Param("id") id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
-  }
-
-  @Delete(":id")
-  remove(@Param("id") id: string) {
-    return this.userService.remove(+id);
+    if (!foundUser) {
+      throw new NotFoundException("User not found");
+    }
+    return foundUser;
   }
 }

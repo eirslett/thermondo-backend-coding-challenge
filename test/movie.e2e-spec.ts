@@ -5,6 +5,7 @@ import { startTestDatabase, cleanupTestDatabase } from "./testcontainers-setup";
 import { PrismaService } from "../src/prisma.service";
 import { PrismaClient } from "@prisma/client";
 import { AppModule } from "../src/app.module";
+import { Express } from "express";
 
 interface Movie {
   id: number;
@@ -15,7 +16,7 @@ interface Movie {
 }
 
 describe("MovieController (e2e)", () => {
-  let app: INestApplication;
+  let app: INestApplication<Express>;
   let prismaService: PrismaService;
 
   beforeAll(async () => {
@@ -42,7 +43,7 @@ describe("MovieController (e2e)", () => {
 
     // Get the PrismaService instance
     prismaService = moduleFixture.get<PrismaService>(PrismaService);
-  });
+  }, 10000);
 
   beforeEach(async () => {
     // Clean up the database before each test
