@@ -8,24 +8,40 @@ datasource db {
 }
 
 model Movie {
-  id        String   @id @default(uuid())
-  title     String
+  id          Int      @id @default(autoincrement())
+  title       String
   releaseDate DateTime
-  posterUrl String
+  posterUrl   String
   description String
+
+  // Relations
+  ratings Rating[]
 }
 
 model User {
-  id        String   @id @default(uuid())
-  name      String @unique
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+  // Relations
+  ratings Rating[]
+
+  @@index([name])
 }
 
 model Rating {
-  id        String   @id @default(uuid())
-  userId    String
-  movieId   String
-  rating    Int @default(0)
+  id          Int    @id @default(autoincrement())
+  userId      Int
+  movieId     Int
+  rating      Int    @default(0)
   description String
 
+  // Relations
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  movie Movie @relation(fields: [movieId], references: [id], onDelete: Cascade)
+
   @@unique([userId, movieId])
+  @@index([userId])
+  @@index([movieId])
+  @@index([rating])
+  @@map("ratings")
 }
