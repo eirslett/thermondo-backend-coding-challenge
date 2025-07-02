@@ -35,6 +35,12 @@ The E2E tests use Testcontainers to start isolated PostgreSQL instances for each
 
 `npm run test:e2e`
 
+# Lint
+
+We use ESLint and Prettier for code formatting. Set up your IDE for auto-format on save, for a better developer experience.
+
+Run linting with `npm run lint:eslint` and `npm run lint:prettier`.
+
 # Building the code
 
 `npm run build`
