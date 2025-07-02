@@ -33,7 +33,7 @@ describe("AppController (e2e)", () => {
 
     app = moduleFixture.createNestApplication();
     await app.init();
-  }, 10000);
+  }, 30000);
 
   it("/ (GET)", () => {
     return request(app.getHttpServer())

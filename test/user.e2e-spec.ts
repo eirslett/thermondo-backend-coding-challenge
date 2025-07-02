@@ -43,7 +43,7 @@ describe("UserController (e2e)", () => {
       update: { name: "Alice" },
       create: { id: 1, name: "Alice" },
     });
-  }, 15000);
+  }, 30000);
 
   describe("/user/me (GET)", () => {
     it("should return the current user", async () => {

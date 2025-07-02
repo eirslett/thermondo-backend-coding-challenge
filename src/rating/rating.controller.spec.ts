@@ -5,10 +5,12 @@ import { RatingService } from "./rating.service";
 describe("RatingController", () => {
   let controller: RatingController;
 
+  const mockRatingService = {};
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [RatingController],
-      providers: [RatingService],
+      providers: [{ provide: RatingService, useValue: mockRatingService }],
     }).compile();
 
     controller = module.get<RatingController>(RatingController);
