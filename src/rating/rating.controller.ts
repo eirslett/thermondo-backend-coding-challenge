@@ -21,7 +21,7 @@ export class RatingController {
   constructor(private readonly ratingService: RatingService) {}
 
   @Post()
-  create(
+  async create(
     @Body() createRatingDto: CreateRatingDto,
     @Req() req: AuthenticatedRequest,
   ) {
@@ -40,7 +40,7 @@ export class RatingController {
   }
 
   @Patch(":id")
-  update(
+  async update(
     @Param("id") id: string,
     @Body() updateRatingDto: UpdateRatingDto,
     @Req() req: AuthenticatedRequest,
@@ -50,7 +50,7 @@ export class RatingController {
   }
 
   @Delete(":id")
-  remove(@Param("id") id: string, @Req() req: AuthenticatedRequest) {
+  async remove(@Param("id") id: string, @Req() req: AuthenticatedRequest) {
     if (!req.user) throw new UnauthorizedException("User not authenticated");
     return this.ratingService.remove(+id, req.user.id);
   }
